@@ -113,7 +113,7 @@ class Client(object):
     return r.json()
 
   def getSamples(self, sensor_id, start, granularity, end=None,
-                  frequency=None, perPage=None, page=None
+                  frequency=None, perPage=None, page=None,
                   full=False):
     url = "https://api-staging.neur.io/v1/samples"
     if full:
@@ -171,4 +171,3 @@ class Client(object):
 
     r = requests.get(url, headers=headers)
     return r.json()
-    
