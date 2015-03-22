@@ -28,7 +28,7 @@ tp = neurio.TokenProvider(key=example_keys.key, secret=example_keys.secret)
 nc = neurio.Client(token_provider=tp)
 
 # Get the last 90-seconds of activity:
-samples = nc.getLiveSamples(sensor_id=sensor_id, last=90)
+samples = nc.get_samples_live(sensor_id=sensor_id, last=90)
 
 # Put in 15-second resolution data into the Wolfram data drop:
 for sample in samples[::15]:

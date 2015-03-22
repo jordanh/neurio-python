@@ -25,6 +25,6 @@ sensor_id = "0x0013A20040B65FAD"
 tp = neurio.TokenProvider(key=example_keys.key, secret=example_keys.secret)
 nc = neurio.Client(token_provider=tp)
 
-sample = nc.getLastLiveSample(sensor_id=sensor_id)
+sample = nc.get_samples_live_last(sensor_id=sensor_id)
 
 print "Current power consumption: %d W" % (sample['consumptionPower'])

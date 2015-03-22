@@ -37,19 +37,13 @@ fifteen_min_ago = fifteen_min_ago.replace(microsecond=0).isoformat()
 print "fifteen min ago = %s" % (fifteen_min_ago)
 
 print "Samples:"
-samples = nc.getSamples(sensor_id=sensor_id, start=fifteen_min_ago,
-            granularity="minutes", frequency=5)
-print "samples ="
-pprint.pprint(samples)
-
-print "Full Samples:"
-samples = nc.getFullSamples(sensor_id=sensor_id, start=fifteen_min_ago,
+samples = nc.get_samples(sensor_id=sensor_id, start=fifteen_min_ago,
             granularity="minutes", frequency=5)
 print "samples ="
 pprint.pprint(samples)
 
 print "Stats Samples:"
-samples = nc.getStatsSamples(sensor_id=sensor_id, start=fifteen_min_ago,
+samples = nc.get_samples_stats(sensor_id=sensor_id, start=fifteen_min_ago,
             granularity="minutes", frequency=5)
 print "samples ="
 pprint.pprint(samples)
