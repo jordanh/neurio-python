@@ -7,7 +7,7 @@ setup(
   name = 'neurio',
   packages = ['neurio'],
   version = str(neurio.__version__),
-  install_requires = ['requests'],
+  setup_requires = ['requests'],
   description = 'Neurio energy sensor and appliance automation API library',
   author = 'Jordan Husney',
   author_email = 'jordan.husney@gmail.com',
