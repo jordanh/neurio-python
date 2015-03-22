@@ -1,6 +1,5 @@
 import sys
 sys.path.append('.')
-import neurio
 
 try:
     from setuptools import setup
@@ -10,7 +9,7 @@ except ImportError:
 setup(
   name = 'neurio',
   packages = ['neurio'],
-  version = str(neurio.__version__),
+  version = "0.2.5",
   description = 'Neurio energy sensor and appliance automation API library',
   author = 'Jordan Husney',
   author_email = 'jordan.husney@gmail.com',
@@ -18,5 +17,5 @@ setup(
   download_url = 'https://github.com/jordanh/neurio-python/tarball/0.2.3',
   keywords = ['neurio', 'iot', 'energy', 'sensor', 'smarthome', 'automation'],
   classifiers = [],
-  setup_requires = ['requests'],
+  install_requires = ['requests'],
 )
