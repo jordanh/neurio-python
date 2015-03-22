@@ -1,3 +1,4 @@
+example_keys.py
 *.py?
 *.egg-info
 *.swp
