@@ -15,7 +15,7 @@ setup(
   author = 'Jordan Husney',
   author_email = 'jordan.husney@gmail.com',
   url = 'https://github.com/jordanh/neurio-python',
-  download_url = 'https://github.com/jordanh/neurio-python/tarball/0.2.2',
+  download_url = 'https://github.com/jordanh/neurio-python/tarball/0.2.3',
   keywords = ['neurio', 'iot', 'energy', 'sensor', 'smarthome', 'automation'],
   classifiers = [],
   setup_requires = ['requests'],
