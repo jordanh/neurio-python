@@ -4,7 +4,7 @@ manual_verstr = "0.2"
 
 
 
-auto_build_num = "2"
+auto_build_num = "3"
 
 
 
