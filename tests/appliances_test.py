@@ -20,15 +20,15 @@ sys.path.append(".")
 sys.path.append("..")
 
 import neurio
-import example_keys
+import test_keys
 
 import unittest
 from datetime import datetime, timedelta
 
 class AppliancesTest(unittest.TestCase):
     def setUp(self):
-        self.tp = neurio.TokenProvider(key=example_keys.key,
-                                       secret=example_keys.secret)
+        self.tp = neurio.TokenProvider(key=test_keys.key,
+                                       secret=test_keys.secret)
         self.nc = neurio.Client(token_provider=self.tp)
 
     def test_get_appliances(self):

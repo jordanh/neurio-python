@@ -1,4 +1,4 @@
-example_keys.py
+tests/test_keys.py
 *.py?
 *.egg-info
 *.swp

@@ -84,7 +84,9 @@ Issues can be submitted here: https://github.com/jordanh/neurio-python/issues
 
 ## Testing
 
-A series of unit tests have been written for this library, to run them:
+A series of unit tests have been written for this library. To run them,
+first create a file `tests/test_keys.py` containing your credentials and
+then:
 
     $ python -m unittest discover -s tests -p '*_test.py' -v
 

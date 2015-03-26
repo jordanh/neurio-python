@@ -20,22 +20,27 @@ sys.path.append(".")
 sys.path.append("..")
 
 import neurio
+import test_keys
 import example_keys
 
 import unittest
 
 class AuthTest(unittest.TestCase):
-    sensor_id = "0x0013A20040B65FAD"
-
     def test_token_provider_init(self):
-        tp = neurio.TokenProvider(key=example_keys.key,
-                                  secret=example_keys.secret)
+        tp = neurio.TokenProvider(key=test_keys.key,
+                                  secret=test_keys.secret)
         self.assertIsNotNone(tp)
 
     def test_token_provider_get_token(self):
+        tp = neurio.TokenProvider(key=test_keys.key,
+                                  secret=test_keys.secret)
+        self.assertIsNotNone(tp.get_token(), "unable to fetch token")
+
+    def test_token_provider_invalid_credentials(self):
         tp = neurio.TokenProvider(key=example_keys.key,
                                   secret=example_keys.secret)
-        self.assertIsNotNone(tp.get_token(), "unable to fetch token")
+        with self.assertRaises(Exception):
+            tp.get_token()
 
 
 if __name__ == '__main__':
