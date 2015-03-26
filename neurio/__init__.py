@@ -19,7 +19,7 @@ import urllib
 import urlparse
 import requests
 
-__version__ = "0.2.6"
+__version__ = "0.2.7"
 
 class TokenProvider(object):
   __key = None
@@ -52,7 +52,7 @@ class TokenProvider(object):
     if self.__token is not None:
       return self.__token
 
-    url = "https://api-staging.neur.io/v1/oauth2/token"
+    url = "https://api.neur.io/v1/oauth2/token"
     credentials = base64.b64encode(":".join([self.__key,self.__secret]))
     headers = {
       "Authorization": " ".join(["Basic", credentials]),
@@ -107,7 +107,7 @@ class Client(object):
     Returns:
       list: dictionary objects containing sample data
     """
-    url = "https://api-staging.neur.io/v1/samples/live"
+    url = "https://api.neur.io/v1/samples/live"
 
     headers = self.__gen_headers()
     headers["Content-Type"] = "application/json"
@@ -131,7 +131,7 @@ class Client(object):
     Returns:
       list: dictionary objects containing sample data
     """
-    url = "https://api-staging.neur.io/v1/samples/live/last"
+    url = "https://api.neur.io/v1/samples/live/last"
 
     headers = self.__gen_headers()
     headers["Content-Type"] = "application/json"
@@ -173,9 +173,9 @@ class Client(object):
     Returns:
       list: dictionary objects containing sample data
     """
-    url = "https://api-staging.neur.io/v1/samples"
+    url = "https://api.neur.io/v1/samples"
     if full:
-      url = "https://api-staging.neur.io/v1/samples/full"
+      url = "https://api.neur.io/v1/samples/full"
 
     headers = self.__gen_headers()
     headers["Content-Type"] = "application/json"
@@ -231,7 +231,7 @@ class Client(object):
     Returns:
       list: dictionary objects containing sample statistics data
     """
-    url = "https://api-staging.neur.io/v1/samples/stats"
+    url = "https://api.neur.io/v1/samples/stats"
 
     headers = self.__gen_headers()
     headers["Content-Type"] = "application/json"
@@ -266,7 +266,7 @@ class Client(object):
     Returns:
       list: dictionary objects containing appliances data
     """
-    url = "https://api-staging.neur.io/v1/appliances"
+    url = "https://api.neur.io/v1/appliances"
 
     headers = self.__gen_headers()
     headers["Content-Type"] = "application/json"

@@ -33,7 +33,6 @@ class AppliancesTest(unittest.TestCase):
 
     def test_get_appliances(self):
         apps = self.nc.get_appliances(location_id="Ke_gkbOzSc2zbTW4riCxaA")
-        print apps
         self.assertIsInstance(apps, list)
         self.assertGreater(len(apps), 0, "no appliance information received")
 
