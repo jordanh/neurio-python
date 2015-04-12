@@ -36,6 +36,29 @@ class AppliancesTest(unittest.TestCase):
         self.assertIsInstance(apps, list)
         self.assertGreater(len(apps), 0, "no appliance information received")
 
+    def test_get_appliance(self):
+        apps = self.nc.get_appliances(location_id=test_keys.location_id)
+        self.assertIsInstance(apps, list)
+        self.assertGreater(len(apps), 0, "no appliance information received")
+        self.assertIsInstance(apps[0]["id"], str)
+        app = self.nc.get_appliance(apps[0]["id"])
+        self.assertIsInstance(app, list)
+        self.assertEqual(apps[0]["id"], app["id"])
+
+    def test_get_appliance_event_by_location(self):
+        pass
+
+    def test_get_appliance_event_after_time(self):
+        pass
+
+    def test_get_appliance_event_by_appliance(self):
+        pass
+
+    def test_get_appliance_stats_by_location(self):
+        pass
+
+    def test_get_appliance_stats_by_appliance(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

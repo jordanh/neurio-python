@@ -12,9 +12,7 @@ The library currently supports:
  - OAuth 2 authentication (including token request) – `/v1/oauth2`
  - Consumption and production samples (live and historical) – `/v1/samples`
  - Energy consumption statistics rollups – `/v1/samples/stats`
-
-Appliance detection and reporting will be added as soon as that
-functionality is supported by the official Neurio platform.
+ - Appliance detection and reporting - `/v1/appliances`
 
 
 ## Installation
