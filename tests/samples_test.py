@@ -27,7 +27,7 @@ from datetime import datetime, timedelta
 
 class SamplesTest(unittest.TestCase):
     def setUp(self):
-        self.sensor_id = "0x0013A20040B65FAD"
+        self.sensor_id = test_keys.sensor_id
         self.tp = neurio.TokenProvider(key=test_keys.key,
                                        secret=test_keys.secret)
         self.nc = neurio.Client(token_provider=self.tp)

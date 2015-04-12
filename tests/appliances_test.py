@@ -32,7 +32,7 @@ class AppliancesTest(unittest.TestCase):
         self.nc = neurio.Client(token_provider=self.tp)
 
     def test_get_appliances(self):
-        apps = self.nc.get_appliances(location_id="Ke_gkbOzSc2zbTW4riCxaA")
+        apps = self.nc.get_appliances(location_id=test_keys.location_id)
         self.assertIsInstance(apps, list)
         self.assertGreater(len(apps), 0, "no appliance information received")
 

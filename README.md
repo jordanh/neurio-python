@@ -46,11 +46,15 @@ At the time of writing, this is accomplished by send an e-mail to
 ### 2. Create Private Key File
 
 Create a file named `my_keys.py` (for example) and populate it with the
-`key` and `secret` information you received from Neurio:
+`key` and `secret` information you received from Neurio. For your convenience,
+populate the sensor_id and location_id fields. Location and sensor ID can be
+obtained with get_user_information():
 
 ```python
 key    = "0123456789abcdef012345"
 secret = "0123456789abcdef012345"
+sensor_id = "0x0000123456789"
+location_id = "abcdEFG-hijkLMNOP"
 ```
 
 ### 3. Write Your Application
@@ -67,6 +71,12 @@ import my_keys
 tp = neurio.TokenProvider(key=example_keys.key, secret=example_keys.secret)
 # Create client that can authenticate itself:
 nc = neurio.Client(token_provider=tp)
+# Get user information (including sensor ID and location ID)
+user_info = nc.get_user_information()
+
+print "Sensor ID %s, location ID %s" %(user_info["locations"][0]["sensors"][0]["sensorId"],
+  user_info["locations"][0]["id"])
+
 # Fetch sample:
 sample = nc.get_samples_live_last(sensor_id="0x0013A20040B65FAD")
 
@@ -85,8 +95,8 @@ Issues can be submitted here: https://github.com/jordanh/neurio-python/issues
 ## Testing
 
 A series of unit tests have been written for this library. To run them,
-first create a file `tests/test_keys.py` containing your credentials and
-then:
+first create a file `tests/test_keys.py` containing your credentials
+(test_keys should contain sensor_id and location_id) and then:
 
     $ python -m unittest discover -s tests -p '*_test.py' -v
 
