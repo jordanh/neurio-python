@@ -257,9 +257,6 @@ class Client(object):
   def get_appliances(self, location_id):
     """Get the appliances added for a specified location.
 
-    Note:
-      This funcitonality is not presently supported.
-
     Args:
       location_id (string): identifiying string of appliance
 
@@ -275,6 +272,43 @@ class Client(object):
       "locationId": location_id,
     }
     url = self.__append_url_params(url, params)
+
+    r = requests.get(url, headers=headers)
+    return r.json()
+
+
+  def get_appliance(self, appliance_id):
+    """Get the information for a specified appliance
+
+    Args:
+      location_id (string): identifiying string of appliance
+
+    Returns:
+      list: dictionary object containing information about the specified appliance
+    """
+    url = "https://api.neur.io/v1/appliances/%s"%(appliance_id)
+
+    headers = self.__gen_headers()
+    headers["Content-Type"] = "application/json"
+
+    r = requests.get(url, headers=headers)
+    return r.json()
+
+
+
+  def get_user_information(self):
+    """Gets the current user information, including sensor ID
+
+    Args:
+      None
+
+    Returns:
+      list: dictionary object containing information about the current user
+    """
+    url = "https://api.neur.io/v1/users/current"
+
+    headers = self.__gen_headers()
+    headers["Content-Type"] = "application/json"
 
     r = requests.get(url, headers=headers)
     return r.json()
