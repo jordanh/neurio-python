@@ -38,8 +38,9 @@ Using the module is simple:
 
 ### 1. Request API Access Key from Neurio, Inc.
 
-At the time of writing, this is accomplished by send an e-mail to
-[support@neur.io](mailto:support@neurio.io)
+You can create your own API Access Key here:
+https://my.neur.io/#settings/applications/register
+When creating your app, Homepage URL and Callback URL are optional.
 
 ### 2. Create Private Key File
 
