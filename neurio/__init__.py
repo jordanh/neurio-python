@@ -443,7 +443,7 @@ class Client(object):
     specified with the request.
 
     Note:
-      This endpoint uses the location’s time zone when generating time intervals
+      This endpoint uses the location's time zone when generating time intervals
       for the stats, which is relevant if that time zone uses daylight saving
       time (some days will be 23 or 25 hours long).
 
@@ -454,7 +454,7 @@ class Client(object):
       end (string): ISO 8601 stop time for getting the events of appliances.
         Cannot be larger than 1 month from start time
       granularity (string): granularity of stats. If the granularity is
-        ‘unknown’, the stats for the appliances between the start and
+        'unknown', the stats for the appliances between the start and
         end time is returned.;
         must be one of  "minutes", "hours", "days", "weeks", "months", or "unknown"
         (default: days)
@@ -500,7 +500,7 @@ class Client(object):
     specified with the request.
 
     Note:
-      This endpoint uses the location’s time zone when generating time intervals
+      This endpoint uses the location's time zone when generating time intervals
       for the stats, which is relevant if that time zone uses daylight saving
       time (some days will be 23 or 25 hours long).
 
@@ -511,7 +511,7 @@ class Client(object):
       end (string): ISO 8601 stop time for getting the events of appliances.
         Cannot be larger than 1 month from start time
       granularity (string): granularity of stats. If the granularity is
-        ‘unknown’, the stats for the appliances between the start and
+        'unknown', the stats for the appliances between the start and
         end time is returned.;
         must be one of  "minutes", "hours", "days", "weeks", "months", or "unknown"
         (default: days)
