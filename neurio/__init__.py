@@ -19,7 +19,7 @@ import urllib
 import urlparse
 import requests
 
-__version__ = "0.2.7"
+__version__ = "0.2.9"
 
 class TokenProvider(object):
   __key = None
