@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Copyright [2015] [Jordan Husney <jordan.husney@gmail.com>]
+Copyright 2015, 2016 Jordan Husney <jordan.husney@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -40,9 +40,9 @@ class AppliancesTest(unittest.TestCase):
         apps = self.nc.get_appliances(location_id=test_keys.location_id)
         self.assertIsInstance(apps, list)
         self.assertGreater(len(apps), 0, "no appliance information received")
-        self.assertIsInstance(apps[0]["id"], str)
+        self.assertIsInstance(apps[0]["id"], basestring)
         app = self.nc.get_appliance(apps[0]["id"])
-        self.assertIsInstance(app, list)
+        self.assertIsInstance(app, dict)
         self.assertEqual(apps[0]["id"], app["id"])
 
     def test_get_appliance_event_by_location(self):

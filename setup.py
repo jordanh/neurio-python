@@ -9,7 +9,7 @@ except ImportError:
 setup(
   name = 'neurio',
   packages = ['neurio'],
-  version = "0.2.7",
+  version = "0.2.8",
   description = 'Neurio energy sensor and appliance automation API library',
   author = 'Jordan Husney',
   author_email = 'jordan.husney@gmail.com',
