@@ -101,7 +101,7 @@ first create a file `tests/test_keys.py` containing your credentials
 
 ## License
 
-Copyright 2015, Jordan Husney <jordan.husney@gmail.com>
+Copyright 2015, 2016 Jordan Husney <jordan.husney@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
