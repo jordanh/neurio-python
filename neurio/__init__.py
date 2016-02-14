@@ -74,8 +74,6 @@ class TokenProvider(object):
 
     r = requests.post(url, data=payload, headers=headers)
 
-    print(r.json())
-
     self.__token = r.json()["access_token"]
 
     return self.__token
