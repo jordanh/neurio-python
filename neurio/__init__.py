@@ -15,11 +15,19 @@ limitations under the License.
 """
 
 import base64
-import urllib
-import urlparse
 import requests
 
-__version__ = "0.2.9"
+try:
+  from urllib import urlencode
+except ImportError:
+  from urllib.parse import urlencode
+
+try:
+  from urlparse import urlparse, parse_qsl, urlunparse
+except ImportError:
+  from urllib.parse import urlparse, parse_qsl, urlunparse
+
+__version__ = "0.3.0"
 
 class TokenProvider(object):
   __key = None
@@ -53,7 +61,10 @@ class TokenProvider(object):
       return self.__token
 
     url = "https://api.neur.io/v1/oauth2/token"
-    credentials = base64.b64encode(":".join([self.__key,self.__secret]))
+    try:
+      credentials = base64.b64encode(":".join([self.__key,self.__secret]))
+    except TypeError:
+      credentials = base64.b64encode(self.__key.encode('ascii') + ":".encode('ascii') + self.__secret.encode('ascii')).decode("utf-8")
     headers = {
       "Authorization": " ".join(["Basic", credentials]),
     }
@@ -62,6 +73,8 @@ class TokenProvider(object):
     }
 
     r = requests.post(url, data=payload, headers=headers)
+
+    print(r.json())
 
     self.__token = r.json()["access_token"]
 
@@ -89,12 +102,12 @@ class Client(object):
 
   def __append_url_params(self, url, params):
     """Utility method formatting url request parameters."""
-    url_parts = list(urlparse.urlparse(url))
-    query = dict(urlparse.parse_qsl(url_parts[4]))
+    url_parts = list(urlparse(url))
+    query = dict(parse_qsl(url_parts[4]))
     query.update(params)
-    url_parts[4] = urllib.urlencode(query)
+    url_parts[4] = urlencode(query)
 
-    return urlparse.urlunparse(url_parts)
+    return urlunparse(url_parts)
 
   def get_samples_live(self, sensor_id, last=None):
     """Get recent samples, one sample per second for up to the last 2 minutes.
