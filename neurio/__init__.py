@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import base64
 import requests
+from base64 import b64encode
 
 try:
   from urllib import urlencode
@@ -27,7 +27,7 @@ try:
 except ImportError:
   from urllib.parse import urlparse, parse_qsl, urlunparse
 
-__version__ = "0.3.0"
+__version__ = "0.2.10"
 
 class TokenProvider(object):
   __key = None
@@ -61,12 +61,11 @@ class TokenProvider(object):
       return self.__token
 
     url = "https://api.neur.io/v1/oauth2/token"
-    try:
-      credentials = base64.b64encode(":".join([self.__key,self.__secret]))
-    except TypeError:
-      credentials = base64.b64encode(self.__key.encode('ascii') + ":".encode('ascii') + self.__secret.encode('ascii')).decode("utf-8")
+
+    creds = b64encode(":".join([self.__key,self.__secret]).encode()).decode()
+
     headers = {
-      "Authorization": " ".join(["Basic", credentials]),
+      "Authorization": " ".join(["Basic", creds]),
     }
     payload = {
       "grant_type": "client_credentials"

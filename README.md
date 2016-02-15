@@ -91,6 +91,10 @@ to see what the world will create with Neurio.
 
 Issues can be submitted here: https://github.com/jordanh/neurio-python/issues
 
+## Changelog
+
+See: [CHANGELOG.md](./CHANGELOG.md)
+
 ## Testing
 
 A series of unit tests have been written for this library. To run them,

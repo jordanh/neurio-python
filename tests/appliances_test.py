@@ -40,7 +40,11 @@ class AppliancesTest(unittest.TestCase):
         apps = self.nc.get_appliances(location_id=test_keys.location_id)
         self.assertIsInstance(apps, list)
         self.assertGreater(len(apps), 0, "no appliance information received")
-        self.assertIsInstance(apps[0]["id"], basestring)
+        try:
+            stringtype = basestring
+        except NameError:
+            stringtype = str
+        self.assertIsInstance(apps[0]["id"], stringtype)
         app = self.nc.get_appliance(apps[0]["id"])
         self.assertIsInstance(app, dict)
         self.assertEqual(apps[0]["id"], app["id"])
