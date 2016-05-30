@@ -13,6 +13,7 @@ The library currently supports:
  - Consumption and production samples (live and historical) – `/v1/samples`
  - Energy consumption statistics rollups – `/v1/samples/stats`
  - Appliance detection and reporting - `/v1/appliances`
+ - Local sensor sampling - `http://<IP_address>/current-sample`
 
 
 ## Installation
