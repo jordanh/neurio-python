@@ -28,7 +28,7 @@ try:
 except ImportError:
   from urllib.parse import urlparse, parse_qsl, urlunparse
 
-__version__ = "0.2.10"
+__version__ = "0.3.0"
 
 class TokenProvider(object):
   __key = None
