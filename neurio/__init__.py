@@ -28,7 +28,7 @@ try:
 except ImportError:
   from urllib.parse import urlparse, parse_qsl, urlunparse
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 class TokenProvider(object):
   __key = None
@@ -88,6 +88,11 @@ class Client(object):
     Args:
       token_provider (TokenProvider): object providing authentication services
     """
+    if token_provider is None:
+      raise ValueError("token_provider is required")
+    if not isinstance(token_provider, TokenProvider):
+      raise ValueError("token_provider must be instance of TokenProvider")
+
     self.__token = token_provider.get_token()
 
   def __gen_headers(self):
@@ -381,8 +386,11 @@ class Client(object):
     r = requests.get(url, headers=headers)
     return r.json()
 
-  def get_local_current_sample(self, ip):
+  @staticmethod
+  def get_local_current_sample(ip):
     """Gets current sample from *local* Neurio device IP address.
+
+    This is a static method. It doesn't require a token to authenticate.
 
     Note, call get_user_information to determine local Neurio IP addresses.
 

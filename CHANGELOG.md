@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.1]
+### Changes
+- Made `get_local_current_sample()` method static.
+
 ## [0.3.0]
 ### Added
 - Added method get_local_current_sample for querying sensor on local network
@@ -72,6 +76,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial release
 
+[0.3.1]: https://github.com/jordanh/neurio-python/compare/0.3.0...0.3.1
+[0.3.0]: https://github.com/jordanh/neurio-python/compare/0.2.10...0.3.0
 [0.3.0]: https://github.com/jordanh/neurio-python/compare/0.2.10...0.3.0
 [0.2.10]: https://github.com/jordanh/neurio-python/compare/0.2.9...0.2.10
 [0.2.9]: https://github.com/jordanh/neurio-python/compare/0.2.8...0.2.9
