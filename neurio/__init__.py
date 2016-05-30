@@ -16,6 +16,7 @@ limitations under the License.
 
 import requests
 from base64 import b64encode
+import re
 
 try:
   from urllib import urlencode
@@ -45,7 +46,7 @@ class TokenProvider(object):
     self.__secret = secret
 
     if self.__key is None or self.__secret is None:
-            raise ValueError("Key and secret must be set.")
+      raise ValueError("Key and secret must be set.")
 
   def get_token(self):
     """Performs Neurio API token authentication using provided key and secret.
@@ -106,6 +107,303 @@ class Client(object):
 
     return urlunparse(url_parts)
 
+  def get_appliance(self, appliance_id):
+    """Get the information for a specified appliance
+
+    Args:
+      appliance_id (string): identifiying string of appliance
+
+    Returns:
+      list: dictionary object containing information about the specified appliance
+    """
+    url = "https://api.neur.io/v1/appliances/%s"%(appliance_id)
+
+    headers = self.__gen_headers()
+    headers["Content-Type"] = "application/json"
+
+    r = requests.get(url, headers=headers)
+    return r.json()
+
+  def get_appliances(self, location_id):
+    """Get the appliances added for a specified location.
+
+    Args:
+      location_id (string): identifiying string of appliance
+
+    Returns:
+      list: dictionary objects containing appliances data
+    """
+    url = "https://api.neur.io/v1/appliances"
+
+    headers = self.__gen_headers()
+    headers["Content-Type"] = "application/json"
+
+    params = {
+      "locationId": location_id,
+    }
+    url = self.__append_url_params(url, params)
+
+    r = requests.get(url, headers=headers)
+    return r.json()
+
+  def get_appliance_event_by_location(self, location_id, start, end, per_page=None, page=None, min_power=None):
+    """Get appliance events by location Id.
+
+    Args:
+      location_id (string): hexadecimal id of the sensor to query, e.g.
+                          ``0x0013A20040B65FAD``
+      start (string): ISO 8601 start time for getting the events of appliances.
+      end (string): ISO 8601 stop time for getting the events of appliances.
+        Cannot be larger than 1 day from start time
+      min_power (string): The minimum average power (in watts) for filtering.
+        Only events with an average power above this value will be returned.
+        (default: 400)
+      per_page (string, optional): the number of returned results per page
+        (min 1, max 500) (default: 10)
+      page (string, optional): the page number to return (min 1, max 100000)
+        (default: 1)
+
+    Returns:
+      list: dictionary objects containing appliance events meeting specified criteria
+    """
+    url = "https://api.neur.io/v1/appliances/events"
+
+    headers = self.__gen_headers()
+    headers["Content-Type"] = "application/json"
+
+    params = {
+      "locationId": location_id,
+      "start": start,
+      "end": end
+    }
+    if min_power:
+      params["minPower"] = min_power
+    if per_page:
+      params["perPage"] = per_page
+    if page:
+      params["page"] = page
+    url = self.__append_url_params(url, params)
+
+    r = requests.get(url, headers=headers)
+    return r.json()
+
+  def get_appliance_event_after_time(self, location_id, since, per_page=None, page=None, min_power=None):
+    """Get appliance events by location Id after defined time.
+
+    Args:
+      location_id (string): hexadecimal id of the sensor to query, e.g.
+                          ``0x0013A20040B65FAD``
+      since (string): ISO 8601 start time for getting the events that are created or updated after it.
+        Maxiumim value allowed is 1 day from the current time.
+      min_power (string): The minimum average power (in watts) for filtering.
+        Only events with an average power above this value will be returned.
+        (default: 400)
+      per_page (string, optional): the number of returned results per page
+        (min 1, max 500) (default: 10)
+      page (string, optional): the page number to return (min 1, max 100000)
+        (default: 1)
+
+    Returns:
+      list: dictionary objects containing appliance events meeting specified criteria
+    """
+    url = "https://api.neur.io/v1/appliances/events"
+
+    headers = self.__gen_headers()
+    headers["Content-Type"] = "application/json"
+
+    params = {
+      "locationId": location_id,
+      "since": since
+    }
+    if min_power:
+      params["minPower"] = min_power
+    if per_page:
+      params["perPage"] = per_page
+    if page:
+      params["page"] = page
+    url = self.__append_url_params(url, params)
+
+    r = requests.get(url, headers=headers)
+    return r.json()
+
+  def get_appliance_event_by_appliance(self, appliance_id, start, end, per_page=None, page=None, min_power=None):
+    """Get appliance events by appliance Id.
+
+    Args:
+      appliance_id (string): hexadecimal id of the appliance to query, e.g.
+                          ``0x0013A20040B65FAD``
+      start (string): ISO 8601 start time for getting the events of appliances.
+      end (string): ISO 8601 stop time for getting the events of appliances.
+        Cannot be larger than 1 day from start time
+      min_power (string): The minimum average power (in watts) for filtering.
+        Only events with an average power above this value will be returned.
+        (default: 400)
+      per_page (string, optional): the number of returned results per page
+        (min 1, max 500) (default: 10)
+      page (string, optional): the page number to return (min 1, max 100000)
+        (default: 1)
+
+    Returns:
+      list: dictionary objects containing appliance events meeting specified criteria
+    """
+    url = "https://api.neur.io/v1/appliances/events"
+
+    headers = self.__gen_headers()
+    headers["Content-Type"] = "application/json"
+
+    params = {
+      "applianceId": appliance_id,
+      "start": start,
+      "end": end
+    }
+    if min_power:
+      params["minPower"] = min_power
+    if per_page:
+      params["perPage"] = per_page
+    if page:
+      params["page"] = page
+    url = self.__append_url_params(url, params)
+
+    r = requests.get(url, headers=headers)
+    return r.json()
+
+  def get_appliance_stats_by_appliance(self, appliance_id, start, end, granularity=None, per_page=None, page=None,
+                                      min_power=None):
+    """Get appliance usage data for a single appliance within a given time range.
+    Stats are generated by fetching appliance events that match the supplied
+    criteria and then aggregating them together based on the granularity
+    specified with the request.
+
+    Note:
+      This endpoint uses the location's time zone when generating time intervals
+      for the stats, which is relevant if that time zone uses daylight saving
+      time (some days will be 23 or 25 hours long).
+
+    Args:
+      appliance_id (string): hexadecimal id of the appliance to query, e.g.
+                          ``0x0013A20040B65FAD``
+      start (string): ISO 8601 start time for getting the events of appliances.
+      end (string): ISO 8601 stop time for getting the events of appliances.
+        Cannot be larger than 1 month from start time
+      granularity (string): granularity of stats. If the granularity is
+        'unknown', the stats for the appliances between the start and
+        end time is returned.;
+        must be one of  "minutes", "hours", "days", "weeks", "months", or "unknown"
+        (default: days)
+      min_power (string): The minimum average power (in watts) for filtering.
+        Only events with an average power above this value will be returned.
+        (default: 400)
+      per_page (string, optional): the number of returned results per page
+        (min 1, max 500) (default: 10)
+      page (string, optional): the page number to return (min 1, max 100000)
+        (default: 1)
+
+    Returns:
+      list: dictionary objects containing appliance events meeting specified criteria
+    """
+    url = "https://api.neur.io/v1/appliances/stats"
+
+    headers = self.__gen_headers()
+    headers["Content-Type"] = "application/json"
+
+    params = {
+      "applianceId": appliance_id,
+      "start": start,
+      "end": end
+    }
+    if granularity:
+      params["granularity"] = granularity
+    if min_power:
+      params["minPower"] = min_power
+    if per_page:
+      params["perPage"] = per_page
+    if page:
+      params["page"] = page
+    url = self.__append_url_params(url, params)
+
+    r = requests.get(url, headers=headers)
+    return r.json()
+
+  def get_appliance_stats_by_location(self, location_id, start, end, granularity=None, per_page=None, page=None,
+                                      min_power=None):
+    """Get appliance usage data for a given location within a given time range.
+    Stats are generated by fetching appliance events that match the supplied
+    criteria and then aggregating them together based on the granularity
+    specified with the request.
+
+    Note:
+      This endpoint uses the location's time zone when generating time intervals
+      for the stats, which is relevant if that time zone uses daylight saving
+      time (some days will be 23 or 25 hours long).
+
+    Args:
+      location_id (string): hexadecimal id of the sensor to query, e.g.
+                          ``0x0013A20040B65FAD``
+      start (string): ISO 8601 start time for getting the events of appliances.
+      end (string): ISO 8601 stop time for getting the events of appliances.
+        Cannot be larger than 1 month from start time
+      granularity (string): granularity of stats. If the granularity is
+        'unknown', the stats for the appliances between the start and
+        end time is returned.;
+        must be one of  "minutes", "hours", "days", "weeks", "months", or "unknown"
+        (default: days)
+      min_power (string): The minimum average power (in watts) for filtering.
+        Only events with an average power above this value will be returned.
+        (default: 400)
+      per_page (string, optional): the number of returned results per page
+        (min 1, max 500) (default: 10)
+      page (string, optional): the page number to return (min 1, max 100000)
+        (default: 1)
+
+    Returns:
+      list: dictionary objects containing appliance events meeting specified criteria
+    """
+    url = "https://api.neur.io/v1/appliances/stats"
+
+    headers = self.__gen_headers()
+    headers["Content-Type"] = "application/json"
+
+    params = {
+      "locationId": location_id,
+      "start": start,
+      "end": end
+    }
+    if granularity:
+      params["granularity"] = granularity
+    if min_power:
+      params["minPower"] = min_power
+    if per_page:
+      params["perPage"] = per_page
+    if page:
+      params["page"] = page
+    url = self.__append_url_params(url, params)
+
+    r = requests.get(url, headers=headers)
+    return r.json()
+
+  def get_local_current_sample(self, ip):
+    """Gets current sample from *local* Neurio device IP address.
+
+    Note, call get_user_information to determine local Neurio IP addresses.
+
+    Args:
+      ip (string): address of local Neurio device
+
+    Returns:
+      dictionary object containing current sample information
+    """
+    valid_ip_pat = re.compile(
+      "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+    )
+    if not valid_ip_pat.match(ip):
+      raise ValueError("ip address invalid")
+
+    url = "http://%s/current-sample" % (ip)
+    headers = { "Content-Type": "application/json" }
+
+    r = requests.get(url, headers=headers)
+    return r.json()
+
   def get_samples_live(self, sensor_id, last=None):
     """Get recent samples, one sample per second for up to the last 2 minutes.
 
@@ -129,7 +427,6 @@ class Client(object):
 
     r = requests.get(url, headers=headers)
     return r.json()
-
 
   def get_samples_live_last(self, sensor_id):
     """Get the last sample recorded by the sensor.
@@ -264,48 +561,6 @@ class Client(object):
     r = requests.get(url, headers=headers)
     return r.json()
 
-  def get_appliances(self, location_id):
-    """Get the appliances added for a specified location.
-
-    Args:
-      location_id (string): identifiying string of appliance
-
-    Returns:
-      list: dictionary objects containing appliances data
-    """
-    url = "https://api.neur.io/v1/appliances"
-
-    headers = self.__gen_headers()
-    headers["Content-Type"] = "application/json"
-
-    params = {
-      "locationId": location_id,
-    }
-    url = self.__append_url_params(url, params)
-
-    r = requests.get(url, headers=headers)
-    return r.json()
-
-
-  def get_appliance(self, appliance_id):
-    """Get the information for a specified appliance
-
-    Args:
-      appliance_id (string): identifiying string of appliance
-
-    Returns:
-      list: dictionary object containing information about the specified appliance
-    """
-    url = "https://api.neur.io/v1/appliances/%s"%(appliance_id)
-
-    headers = self.__gen_headers()
-    headers["Content-Type"] = "application/json"
-
-    r = requests.get(url, headers=headers)
-    return r.json()
-
-
-
   def get_user_information(self):
     """Gets the current user information, including sensor ID
 
@@ -319,242 +574,6 @@ class Client(object):
 
     headers = self.__gen_headers()
     headers["Content-Type"] = "application/json"
-
-    r = requests.get(url, headers=headers)
-    return r.json()
-
-
-  def get_appliance_event_by_location(self, location_id, start, end, per_page=None, page=None, min_power=None):
-    """Get appliance events by location Id.
-
-    Args:
-      location_id (string): hexadecimal id of the sensor to query, e.g.
-                          ``0x0013A20040B65FAD``
-      start (string): ISO 8601 start time for getting the events of appliances.
-      end (string): ISO 8601 stop time for getting the events of appliances.
-        Cannot be larger than 1 day from start time
-      min_power (string): The minimum average power (in watts) for filtering.
-        Only events with an average power above this value will be returned.
-        (default: 400)
-      per_page (string, optional): the number of returned results per page
-        (min 1, max 500) (default: 10)
-      page (string, optional): the page number to return (min 1, max 100000)
-        (default: 1)
-
-    Returns:
-      list: dictionary objects containing appliance events meeting specified criteria
-    """
-    url = "https://api.neur.io/v1/appliances/events"
-
-    headers = self.__gen_headers()
-    headers["Content-Type"] = "application/json"
-
-    params = {
-      "locationId": location_id,
-      "start": start,
-      "end": end
-    }
-    if min_power:
-      params["minPower"] = min_power
-    if per_page:
-      params["perPage"] = per_page
-    if page:
-      params["page"] = page
-    url = self.__append_url_params(url, params)
-
-    r = requests.get(url, headers=headers)
-    return r.json()
-
-  def get_appliance_event_after_time(self, location_id, since, per_page=None, page=None, min_power=None):
-    """Get appliance events by location Id after defined time.
-
-    Args:
-      location_id (string): hexadecimal id of the sensor to query, e.g.
-                          ``0x0013A20040B65FAD``
-      since (string): ISO 8601 start time for getting the events that are created or updated after it.
-        Maxiumim value allowed is 1 day from the current time.
-      min_power (string): The minimum average power (in watts) for filtering.
-        Only events with an average power above this value will be returned.
-        (default: 400)
-      per_page (string, optional): the number of returned results per page
-        (min 1, max 500) (default: 10)
-      page (string, optional): the page number to return (min 1, max 100000)
-        (default: 1)
-
-    Returns:
-      list: dictionary objects containing appliance events meeting specified criteria
-    """
-    url = "https://api.neur.io/v1/appliances/events"
-
-    headers = self.__gen_headers()
-    headers["Content-Type"] = "application/json"
-
-    params = {
-      "locationId": location_id,
-      "since": since
-    }
-    if min_power:
-      params["minPower"] = min_power
-    if per_page:
-      params["perPage"] = per_page
-    if page:
-      params["page"] = page
-    url = self.__append_url_params(url, params)
-
-    r = requests.get(url, headers=headers)
-    return r.json()
-
-  def get_appliance_event_by_appliance(self, appliance_id, start, end, per_page=None, page=None, min_power=None):
-    """Get appliance events by appliance Id.
-
-    Args:
-      appliance_id (string): hexadecimal id of the appliance to query, e.g.
-                          ``0x0013A20040B65FAD``
-      start (string): ISO 8601 start time for getting the events of appliances.
-      end (string): ISO 8601 stop time for getting the events of appliances.
-        Cannot be larger than 1 day from start time
-      min_power (string): The minimum average power (in watts) for filtering.
-        Only events with an average power above this value will be returned.
-        (default: 400)
-      per_page (string, optional): the number of returned results per page
-        (min 1, max 500) (default: 10)
-      page (string, optional): the page number to return (min 1, max 100000)
-        (default: 1)
-
-    Returns:
-      list: dictionary objects containing appliance events meeting specified criteria
-    """
-    url = "https://api.neur.io/v1/appliances/events"
-
-    headers = self.__gen_headers()
-    headers["Content-Type"] = "application/json"
-
-    params = {
-      "applianceId": appliance_id,
-      "start": start,
-      "end": end
-    }
-    if min_power:
-      params["minPower"] = min_power
-    if per_page:
-      params["perPage"] = per_page
-    if page:
-      params["page"] = page
-    url = self.__append_url_params(url, params)
-
-    r = requests.get(url, headers=headers)
-    return r.json()
-
-  def get_appliance_stats_by_location(self, location_id, start, end, granularity=None, per_page=None, page=None,
-                                      min_power=None):
-    """Get appliance usage data for a given location within a given time range.
-    Stats are generated by fetching appliance events that match the supplied
-    criteria and then aggregating them together based on the granularity
-    specified with the request.
-
-    Note:
-      This endpoint uses the location's time zone when generating time intervals
-      for the stats, which is relevant if that time zone uses daylight saving
-      time (some days will be 23 or 25 hours long).
-
-    Args:
-      location_id (string): hexadecimal id of the sensor to query, e.g.
-                          ``0x0013A20040B65FAD``
-      start (string): ISO 8601 start time for getting the events of appliances.
-      end (string): ISO 8601 stop time for getting the events of appliances.
-        Cannot be larger than 1 month from start time
-      granularity (string): granularity of stats. If the granularity is
-        'unknown', the stats for the appliances between the start and
-        end time is returned.;
-        must be one of  "minutes", "hours", "days", "weeks", "months", or "unknown"
-        (default: days)
-      min_power (string): The minimum average power (in watts) for filtering.
-        Only events with an average power above this value will be returned.
-        (default: 400)
-      per_page (string, optional): the number of returned results per page
-        (min 1, max 500) (default: 10)
-      page (string, optional): the page number to return (min 1, max 100000)
-        (default: 1)
-
-    Returns:
-      list: dictionary objects containing appliance events meeting specified criteria
-    """
-    url = "https://api.neur.io/v1/appliances/stats"
-
-    headers = self.__gen_headers()
-    headers["Content-Type"] = "application/json"
-
-    params = {
-      "locationId": location_id,
-      "start": start,
-      "end": end
-    }
-    if granularity:
-      params["granularity"] = granularity
-    if min_power:
-      params["minPower"] = min_power
-    if per_page:
-      params["perPage"] = per_page
-    if page:
-      params["page"] = page
-    url = self.__append_url_params(url, params)
-
-    r = requests.get(url, headers=headers)
-    return r.json()
-
-  def get_appliance_stats_by_appliance(self, appliance_id, start, end, granularity=None, per_page=None, page=None,
-                                      min_power=None):
-    """Get appliance usage data for a single appliance within a given time range.
-    Stats are generated by fetching appliance events that match the supplied
-    criteria and then aggregating them together based on the granularity
-    specified with the request.
-
-    Note:
-      This endpoint uses the location's time zone when generating time intervals
-      for the stats, which is relevant if that time zone uses daylight saving
-      time (some days will be 23 or 25 hours long).
-
-    Args:
-      appliance_id (string): hexadecimal id of the appliance to query, e.g.
-                          ``0x0013A20040B65FAD``
-      start (string): ISO 8601 start time for getting the events of appliances.
-      end (string): ISO 8601 stop time for getting the events of appliances.
-        Cannot be larger than 1 month from start time
-      granularity (string): granularity of stats. If the granularity is
-        'unknown', the stats for the appliances between the start and
-        end time is returned.;
-        must be one of  "minutes", "hours", "days", "weeks", "months", or "unknown"
-        (default: days)
-      min_power (string): The minimum average power (in watts) for filtering.
-        Only events with an average power above this value will be returned.
-        (default: 400)
-      per_page (string, optional): the number of returned results per page
-        (min 1, max 500) (default: 10)
-      page (string, optional): the page number to return (min 1, max 100000)
-        (default: 1)
-
-    Returns:
-      list: dictionary objects containing appliance events meeting specified criteria
-    """
-    url = "https://api.neur.io/v1/appliances/stats"
-
-    headers = self.__gen_headers()
-    headers["Content-Type"] = "application/json"
-
-    params = {
-      "applianceId": appliance_id,
-      "start": start,
-      "end": end
-    }
-    if granularity:
-      params["granularity"] = granularity
-    if min_power:
-      params["minPower"] = min_power
-    if per_page:
-      params["perPage"] = per_page
-    if page:
-      params["page"] = page
-    url = self.__append_url_params(url, params)
 
     r = requests.get(url, headers=headers)
     return r.json()
