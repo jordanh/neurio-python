@@ -16,6 +16,7 @@ limitations under the License.
 
 import requests
 from base64 import b64encode
+import re
 
 try:
   from urllib import urlencode
@@ -45,7 +46,7 @@ class TokenProvider(object):
     self.__secret = secret
 
     if self.__key is None or self.__secret is None:
-            raise ValueError("Key and secret must be set.")
+      raise ValueError("Key and secret must be set.")
 
   def get_token(self):
     """Performs Neurio API token authentication using provided key and secret.
@@ -376,6 +377,29 @@ class Client(object):
     if page:
       params["page"] = page
     url = self.__append_url_params(url, params)
+
+    r = requests.get(url, headers=headers)
+    return r.json()
+
+  def get_local_current_sample(self, ip):
+    """Gets current sample from *local* Neurio device IP address.
+
+    Note, call get_user_information to determine local Neurio IP addresses.
+
+    Args:
+      ip (string): address of local Neurio device
+
+    Returns:
+      dictionary object containing current sample information
+    """
+    valid_ip_pat = re.compile(
+      "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+    )
+    if not valid_ip_pat.match(ip):
+      raise ValueError("ip address invalid")
+
+    url = "http://%s/current-sample" % (ip)
+    headers = { "Content-Type": "application/json" }
 
     r = requests.get(url, headers=headers)
     return r.json()
