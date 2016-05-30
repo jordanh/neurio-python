@@ -42,16 +42,17 @@ class UserInfoTest(unittest.TestCase):
           for sensor in sublist if sensor['sensorType'] == 'neurio'
         ]
         self.assertGreater(len(ips), 0)
-        sample = self.nc.get_local_current_sample(ips[0])
+        # test static method:
+        sample = neurio.Client.get_local_current_sample(ips[0])
         self.assertGreater(len(sample['timestamp']), 0)
 
     def test_local_current_sample_ip_arg(self):
       bad_ip1 = "hostname.domain"
       with self.assertRaises(ValueError):
-        self.nc.get_local_current_sample(bad_ip1)
+        neurio.Client.get_local_current_sample(bad_ip1)
       bad_ip2 = "255.256.257.258"
       with self.assertRaises(ValueError):
-        self.nc.get_local_current_sample(bad_ip2)
+        neurio.Client.get_local_current_sample(bad_ip2)
 
 
 if __name__ == '__main__':

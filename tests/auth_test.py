@@ -42,6 +42,14 @@ class AuthTest(unittest.TestCase):
         with self.assertRaises(Exception):
             tp.get_token()
 
+    def test_token_provider_none(self):
+        with self.assertRaises(ValueError):
+            neurio.Client(token_provider=None)
+
+    def test_token_provider_type(self):
+        with self.assertRaises(ValueError):
+            neurio.Client(token_provider=object())
+
 
 if __name__ == '__main__':
     unittest.main()
