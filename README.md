@@ -48,6 +48,8 @@ When creating your app, Homepage URL and Callback URL are optional.
 Create a file named `my_keys.py` (for example) and populate it with the
 `key` and `secret` information you received from Neurio. For your convenience,
 populate the sensor_id and location_id fields. Location and sensor ID can be
+
+
 obtained with get_user_information():
 
 ```python
@@ -68,7 +70,7 @@ import neurio
 import my_keys
 
 # Setup authentication:
-tp = neurio.TokenProvider(key=example_keys.key, secret=example_keys.secret)
+tp = neurio.TokenProvider(key=my_keys.key, secret=my_keys.secret)
 # Create client that can authenticate itself:
 nc = neurio.Client(token_provider=tp)
 # Get user information (including sensor ID and location ID)
